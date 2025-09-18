@@ -1,0 +1,35 @@
+<div class="w-[fit-content] mx-auto">
+    <% if(todos.size>=1){ %>
+    <ul>
+        <% todos.forEach(todo=>{ %>
+        <li>
+            <form class="flex items-center justify-between border-b-1 p-4 gap-5 deleteTodoForm">
+            <div class="flex items-center gap-4">
+                <input type="checkbox" class="w-6 h-6"/>
+                <input type="text" class="text-xl w-40" name="todoName" value="<%= todo.name %>">
+            </div>
+            <div class="flex items-center gap-5">
+                <!-- <div>
+                    <select name="select-color" class="border border-${item.color}-300 pl-4 py-1 rounded-md bg-${item.color}-300  outline-none">
+                        <option value=""></option>
+                        <option value="red" >red</option>
+                        <option value="blue">blue</option>
+                        <option value="green">green</option>
+                    </select>
+                </div> -->
+                    <button type="submit">
+                        <img src="/assets/trash.svg" alt="trash-icon" class="w-10 border border-[#8e6141ff] rounded-full p-2 bg-[#8e6141ff] cursor-pointer"/>
+                    </button>
+                </div>
+            </form>
+        </li>
+        <%  })%>  
+    </ul>
+    <%  } else{%> 
+        <div>
+            <p class="text-md text-[#8e552b] pt-2 text-center">No todos yet.....</p>
+            <p class="text-md text-gray-500 text-center">take your life seriously and add some todos haha...</p>
+        </div>
+    <% } %>
+</div>
+

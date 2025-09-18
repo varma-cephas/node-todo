@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+<body>
+    <form id="inputTodo" class="w-[fit-content] mx-auto flex items-center">
+        <input type="text" placeholder="Add todoo...." name="todo-input" class="border-b border-t border-l text-2xl my-3 px-3 rounded-l-lg"/>
+        <button type="submit" class="border-t border-r border-b text-2xl p-1.5 rounded-r-lg">
+            <img src="/assets/plus.svg" alt="" class="w-5 border border-[#8e552b] rounded-full  bg-[#8e552b] cursor-pointer"/>
+        </button>
+    </form>
+<%- include("./todo.ejs") %>
+</body>
+</html>
