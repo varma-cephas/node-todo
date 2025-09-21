@@ -1,9 +1,9 @@
 import { todos } from "./home.js"
 
 export const removeTodo = (req, res)=>{
-    const todoName = req.body
+    const todo = req.body
     for(const [key, value] of todos.entries()){
-        if(value.name === todoName.name){
+        if(value.name === todo.name){
             todos.delete(key)
             break
         }

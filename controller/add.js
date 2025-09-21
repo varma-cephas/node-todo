@@ -1,8 +1,8 @@
 import { todos } from "./home.js"
 
 export const add = async (req, res)=>{
-    const todoName = req.body
+    const todo = req.body
     const tempId = (todos.size) + 1;
-    todos.set(tempId, todoName)
+    todos.set(tempId, todo)
     res.send(200)
 }
