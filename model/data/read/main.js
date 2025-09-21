@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3"
-import { fetchAll } from "./sql.js"
+import { fetchAll } from "./setup.js"
 
 export const readData = async ()=>{
     const db = new sqlite3.Database("todo.db");

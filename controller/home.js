@@ -1,8 +1,12 @@
-export const todos = new Map([
-    [1, {name:"Walk the cat", completed:false}],
-]);
+import { readData } from "../model/data/read/main.js";
 
-export const home = (req, res)=>{
+export const todos = new Map([]);
+
+export const home = async (req, res)=>{
+    const todosFromDB = await readData();
+    for(const todo of todosFromDB){
+        todos.set(todo.id, {name:todo.name, completed: todo.completed===1?true:false})
+    }
     res.render("index", {todos})
 }
 
