@@ -1,8 +1,14 @@
-import { todos } from "./home.js"
+import { todos } from "./home.js";
+import { insertData } from "../model/data/insert/main.js";
 
 export const add = async (req, res)=>{
     const todo = req.body
-    const tempId = (todos.size) + 1;
-    todos.set(todo.name, todo)
-    res.send(200)
+    try{
+        todos.set(todo.name, todo)
+        await insertData(todo.name, 0)
+        res.send(200)
+    }catch(err){
+        console.log(err)
+        res.status(500).send("there was an error inserting todo")
+    }
 }
