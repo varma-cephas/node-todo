@@ -1,6 +1,6 @@
 import { readData } from "../model/data/read/main.js";
 
-export const todos = new Map([]);
+import { todos } from "../app.js";
 
 export const home = async (req, res)=>{
     const todosFromDB = await readData();

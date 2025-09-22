@@ -1,15 +1,19 @@
 const inputTodoForm = document.getElementById("inputTodo");
 const deleteTodoBtn = document.querySelectorAll(".deleteTodoForm");
 
-inputTodoForm.addEventListener("submit", (evnt)=>{
+inputTodoForm.addEventListener("submit", async (evnt)=>{
+    evnt.preventDefault();
     const todoName = new FormData(inputTodoForm).get("todo-input");
-    sendTodoData("/add-todo", todoName)
+    await sendTodoData("/add-todo", todoName)
+    await getTodoData("/get-todo")
 })
     
 deleteTodoBtn.forEach(elem=>{
-    elem.addEventListener("click", (evnt)=>{
+    elem.addEventListener("click", async (evnt)=>{
+        evnt.preventDefault();
         const todoName = new FormData(elem).get("todoName")
-        sendTodoData("/delete-todo",todoName);
+        await sendTodoData("/delete-todo",todoName);
+        await getTodoData("/get-todo")
     })
 })
 
@@ -24,5 +28,15 @@ async function sendTodoData (endPoint,todoName){
         })
     }catch(err){
         throw new Error("HTTP err",err)
+    }
+}
+
+async function getTodoData(url){
+    try{
+        const req = await fetch(url);
+        const res = await req.json();
+        console.log(res)
+    }catch(err){
+        console.log(err)
     }
 }
