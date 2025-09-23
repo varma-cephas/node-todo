@@ -5,7 +5,6 @@ const todoList = document.getElementById("todo-list")===null? document.createEle
 const todoListContainer = document.getElementById("todoListContainer");
 const noTodosMessage = document.getElementById("no-todos-message");
 
-
 inputTodoForm.addEventListener("submit", async (evnt)=>{
     evnt.preventDefault();
     const todoName = new FormData(inputTodoForm).get("todo-input");
@@ -13,35 +12,21 @@ inputTodoForm.addEventListener("submit", async (evnt)=>{
     todoNameInput.value = ""
     const todos = await getTodoData("/get-todo");
     const todoItems = updateClientTodoList(todos);
-    if(todoItems.childElementCount<2){
-        noTodosMessage.style.display = "none"
+    if(todoItems.childElementCount>=1){
+        todoListContainer.innerHTML="";
+        todoList.innerHTML=""
         todoList.appendChild(todoItems)
         todoListContainer.appendChild(todoList)
     }else{
         todoList.innerHTML= ""
         todoList.appendChild(todoItems)
     }
-    console.log(deleteTodoBtn)
 })
     
 deleteTodoBtn.forEach(elem=>{
-    elem.addEventListener("click", async (evnt)=>{
+    elem.addEventListener("submit", async (evnt)=>{
         evnt.preventDefault();
-        console.log("here")
-        const todoName = new FormData(elem).get("todoName")
-        await sendTodoData("/delete-todo",todoName);
-        const todos = await getTodoData("/get-todo");
-        if(todos.length<1){
-            todoListContainer.innerHTML = `
-            <div id="no-todos-message">
-                <p class="text-md text-[#8e552b] pt-2 text-center">No todos yet.....</p>
-                <p class="text-md text-gray-500 text-center">take your life seriously and add some todos haha...</p>
-            </div>
-            `
-        }
-        const todoItems = updateClientTodoList(todos);
-        todoList.innerHTML= "";
-        todoList.appendChild(todoItems);
+        await handleDeleteTodo(elem)
     })
 })
 
@@ -73,21 +58,43 @@ function updateClientTodoList(todos){
     const fragment = new DocumentFragment();
     for(const todo of todos){
         const listItem = document.createElement("li");
-        listItem.innerHTML = 
+        const form = document.createElement("form")
+        form.className = "flex items-center justify-between border-b-1 p-4 gap-5 deleteTodoForm";
+        form.innerHTML = 
             `
-                <form class="flex items-center justify-between border-b-1 p-4 gap-5 deleteTodoForm">
-                    <div class="flex items-center gap-4">
-                        <input type="checkbox" class="w-6 h-6"/>
-                        <input type="text" class="text-xl w-40" name="todoName" value="${todo.name}">
-                    </div>
-                    <div class="flex items-center gap-5">
-                        <button type="submit">
-                            <img src="/assets/trash.svg" alt="trash-icon" class="w-10 border border-[#8e6141ff] rounded-full p-2 bg-[#8e6141ff] cursor-pointer"/>
-                        </button>
-                    </div>
-                </form>
+                <div class="flex items-center gap-4">
+                    <input type="checkbox" class="w-6 h-6"/>
+                    <input type="text" class="text-xl w-40" name="todoName" value="${todo.name}">
+                </div>
+                <div class="flex items-center gap-5">
+                    <button type="submit">
+                        <img src="/assets/trash.svg" alt="trash-icon" class="w-10 border border-[#8e6141ff] rounded-full p-2 bg-[#8e6141ff] cursor-pointer"/>
+                    </button>
+                </div>
             `
+        form.addEventListener("submit", async evnt=>{
+            evnt.preventDefault();
+            await handleDeleteTodo(form)
+        })
+        listItem.append(form)
         fragment.append(listItem)
     }
     return fragment
+}
+
+async function handleDeleteTodo(form){
+    const todoName = new FormData(form).get("todoName")
+    await sendTodoData("/delete-todo",todoName);
+    const todos = await getTodoData("/get-todo");
+    if(todos.length===0){
+        todoListContainer.innerHTML = `
+        <div id="no-todos-message">
+            <p class="text-md text-[#8e552b] pt-2 text-center">No todos yet.....</p>
+            <p class="text-md text-gray-500 text-center">take your life seriously and add some todos haha...</p>
+        </div>
+        `
+    }
+    const todoItems = updateClientTodoList(todos);
+    todoList.innerHTML= "";
+    todoList.appendChild(todoItems);
 }
